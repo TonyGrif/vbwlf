@@ -17,6 +17,9 @@ dev = [
     "ty>=0.0.1a21",
 ]
 
+[tool.ty.src]
+exclude = ["dags/*"]
+
 [tool.poe.tasks]
 test = "pytest --cov --cov-report term-missing"
 
