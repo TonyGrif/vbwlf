@@ -9,6 +9,7 @@ Attributes:
 import requests
 from typing import Dict, List, Optional
 import logging
+from functools import reduce
 
 import pandas as pd
 import numpy as np
@@ -137,7 +138,7 @@ def parse_instantaneous_values(data: Dict) -> pd.DataFrame:
         dataframes.append(df)
         logger.debug("Values (%s) aquired from %s", len(df), var_code)
 
-    df = pd.concat(dataframes, axis=1)
+    df = reduce(lambda x, y: pd.merge(x, y, on="datetime"), dataframes)
 
     for empty in empty_vars:
         df[empty] = np.nan
