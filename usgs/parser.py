@@ -1,6 +1,7 @@
 """This module contains code for request and parsing USGS data
 
 Attributes:
+    get_instantaneous_values: Get instantaneous values from a USGS site location
     query_instantaneous_values: Send an HTTP request for a site's instantaneous values
     parse_instantaneous_values: Parse the JSON response from USGS into a DataFrame
 """
@@ -16,6 +17,33 @@ logger = logging.getLogger(__name__)
 
 
 _SITE_URL = "https://waterservices.usgs.gov/nwis/iv/"
+
+
+def get_instantaneous_values(
+    site_id: str,
+    params: str | List[str],
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    agency: Optional[str] = "USGS",
+    **kwargs,
+) -> pd.DataFrame:
+    """Get the instantaneous values from a USGS site
+
+    Args:
+        site_id: USGS site identification number
+        params: Parameter id(s) of desired data types in query
+        start_date: ISO 8601 string representing the start date of query
+        end_date: ISO 8601 string representing the end date of query
+        agency: Agency in control of this site, defaults to USGS
+        kwargs: Additional arguments passed to `requests.get`
+
+    Returns:
+        Pandas DataFrame
+    """
+    response = query_instantaneous_values(
+        site_id, params, start_date, end_date, agency, **kwargs
+    )
+    return parse_instantaneous_values(response.json())
 
 
 def query_instantaneous_values(

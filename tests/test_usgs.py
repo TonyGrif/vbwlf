@@ -1,5 +1,5 @@
 import pytest
-from usgs import query_instantaneous_values, parse_instantaneous_values
+from usgs.parser import query_instantaneous_values, parse_instantaneous_values
 
 import pandas as pd
 
