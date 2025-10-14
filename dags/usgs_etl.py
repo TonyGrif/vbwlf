@@ -3,7 +3,7 @@
 from airflow.sdk import dag, task
 from datetime import datetime, timedelta
 
-from usgs import query_instantaneous_values
+from usgs import query_instantaneous_values, parse_instantaneous_values
 
 
 @dag(
@@ -19,12 +19,13 @@ def usgs_instantaneous_values():
     def extract():
         res = query_instantaneous_values(
             "0204295505",
-            ["62620", "00045"],
-            "2022-02-22",
-            "2022-02-23",
+            ["62620", "00045", "00036", "00035"],
+            "2022-03-01",
+            "2022-03-18",
             timeout=10,
         )
-        print(res)
+        df = parse_instantaneous_values(res.json())
+        print(df)
 
     extract()
 
